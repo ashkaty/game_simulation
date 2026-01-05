@@ -44,7 +44,7 @@ pub struct Layer {
 impl Default for Layer {
     fn default() -> Self {
         Self {
-            material_id: MaterialId::Empty,
+            material_id: MaterialId::Sand,
             height: 0,
         }
     }
@@ -64,23 +64,31 @@ impl Layer {
 /// - `immoveable_ground_level` is the static terrain height for this column.
 /// - `moveable_ground` is the moveable granular/solid layer above terrain.
 /// - `moveable_liquid` is the moveable liquid layer above moveable ground.
-#[derive(Debug, Copy, Clone, Default)]
+#[derive(Debug, Copy, Clone)]
 pub struct Cell {
     pub immoveable_ground_level: u16,
     pub moveable_ground: Layer,
     pub moveable_liquid: Layer,
     generated_this_tick: bool,
 }
-
+impl Default for Cell {
+    fn default() -> Self {
+        Self {
+                immoveable_ground_level: 0,
+                moveable_ground: Layer::default(),
+                moveable_liquid: Layer::default(),
+                generated_this_tick: false
+            }
+        }
+    }
+     
 impl Cell {
     pub fn new(_id: u32, _x_cord: u32, _y_cord: u32) -> Self {
-        Self::empty()
-    }
-
-    pub fn empty() -> Self {
         Self::default()
     }
 
+    
+    
     pub fn total_moveable_height(&self) -> u32 {
         self.moveable_ground.height as u32 + self.moveable_liquid.height as u32
     }
@@ -122,4 +130,5 @@ impl Cell {
     pub fn was_generated_this_tick(&self) -> bool {
         self.generated_this_tick
     }
+
 }

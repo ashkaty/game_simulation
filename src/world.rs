@@ -1,15 +1,16 @@
 use crate::cells::Cell;
 
+#[derive(Clone)]
 pub struct Map {
-    width: u32,
-    height: u32,
+    width: usize,
+    height: usize,
     current_step: u8,
     cells: Vec<Cell>,
 }
 
 impl Map {
     
-    pub fn new(width: u32, height: u32) -> Self {
+    pub fn new(width: usize, height: usize) -> Self {
         let length = width * height;
 
         let cells = vec![Cell::empty(); length as usize];
@@ -23,14 +24,17 @@ impl Map {
         
     }
 
-    pub fn get_width(&self) -> u32 {
+    pub fn get_width(&self) -> usize {
         self.width
     }
-    pub fn get_height(&self) -> u32 {
+    pub fn get_height(&self) -> usize {
         self.height
     }
     pub fn get_step(&self) -> u8 {
         self.current_step
+    }
+    pub fn set_step(&mut self, step: u8) {
+        self.current_step = step;
     }
     pub fn get_cells(&self) -> &Vec<Cell> {
         &self.cells
@@ -40,6 +44,15 @@ impl Map {
     }
     pub fn increment_step(&mut self) {
         self.current_step = self.current_step.wrapping_add(1);
+    }
+
+    /// Copy all state from `other` into `self`.
+    /// Intended for ping-pong/double-buffer simulation passes.
+    pub fn copy_from(&mut self, other: &Map) {
+        self.width = other.width;
+        self.height = other.height;
+        self.current_step = other.current_step;
+        self.cells.clone_from(&other.cells);
     }
 
     pub fn in_bounds(&self, x: u32, z: u32) -> bool {

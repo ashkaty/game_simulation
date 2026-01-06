@@ -13,7 +13,7 @@ impl Map {
     pub fn new(width: usize, height: usize) -> Self {
         let length = width * height;
 
-        let cells = vec![Cell::empty(); length as usize];
+        let cells = vec![Cell::default(); length as usize];
 
         Map{
             width: width,
@@ -55,19 +55,19 @@ impl Map {
         self.cells.clone_from(&other.cells);
     }
 
-    pub fn in_bounds(&self, x: u32, z: u32) -> bool {
+    pub fn in_bounds(&self, x: usize, z: usize) -> bool {
         x < self.width && z < self.height
     }
 
     //The index of a grid is (row * number of columns) + column
-    pub fn index_of(&self, x: u32, z: u32) -> Option<usize> {
+    pub fn index_of(&self, x: usize, z: usize) -> Option<usize> {
         if !self.in_bounds(x, z) {
             return None;
         }
         Some((z as usize) * (self.width as usize) + (x as usize))
     }
 
-    pub fn get_cell(&self, x: u32, z: u32) -> Option<&Cell> {
+    pub fn get_cell(&self, x: usize, z: usize) -> Option<&Cell> {
         let index = self.index_of(x, z);
         if let Some(index) = index {
             return Some(&self.cells[index]);
@@ -75,7 +75,7 @@ impl Map {
         None
     }
 
-    pub fn get_cell_mut(&mut self, x: u32, z: u32) -> Option<&mut Cell> {
+    pub fn get_cell_mut(&mut self, x: usize, z: usize) -> Option<&mut Cell> {
         let index = self.index_of(x, z);
         if let Some(index) = index {
             return Some(&mut self.cells[index]);

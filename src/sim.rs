@@ -66,7 +66,7 @@ impl Simulator {
     fn ensure_next_buffer(&mut self, world_buffer: &Map) {
     }
 
-    fn get_neighourhood<'a>(&self, world_buffer: &'a mut Map, x: u32, z: u32) -> [Option<&'a Cell>; 4] {
+    fn get_neighourhood<'a>(&self, world_buffer: &'a mut Map, x: usize, z: usize) -> [Option<&'a Cell>; 4] {
     let cell1a = world_buffer.get_cell(x, z);
     let cell1b = world_buffer.get_cell(x + 1, z);
     let cell2a = world_buffer.get_cell(x, z + 1);

@@ -36,23 +36,15 @@ impl MaterialId {
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
-pub struct Layer {
-    pub material_id: MaterialId,
-    pub height: u16,
-}
-
-impl Default for Layer {
-    fn default() -> Self {
-        Self {
-            material_id: MaterialId::Sand,
-            height: 0,
-        }
-    }
-}
+d
 
 impl Layer {
+
+    pub fn new(material: MaterialId, height: usize) -> Self {
+        Layer { material_id: material, height: height }
+    }
     pub fn empty() -> Self {
-        Self::default()
+        Self::new(MaterialId::Empty, 0)
     }
 
     pub fn is_empty(&self) -> bool {
@@ -75,26 +67,26 @@ impl Default for Cell {
     fn default() -> Self {
         Self {
                 immoveable_ground_level: 0,
-                moveable_ground: Layer::default(),
-                moveable_liquid: Layer::default(),
+                moveable_ground: Layer::new(MaterialId::Sand, 1),
+                moveable_liquid: Layer::new(MaterialId::Empty, 0),
                 generated_this_tick: false
             }
         }
     }
      
 impl Cell {
-    pub fn new(_id: u32, _x_cord: u32, _y_cord: u32) -> Self {
+    pub fn new() -> Self {
         Self::default()
     }
 
     
     
-    pub fn total_moveable_height(&self) -> u32 {
-        self.moveable_ground.height as u32 + self.moveable_liquid.height as u32
+    pub fn total_moveable_height(&self) -> usize {
+        self.moveable_ground.height as usize + self.moveable_liquid.height as usize
     }
 
-    pub fn column_height(&self) -> u32 {
-        self.immoveable_ground_level as u32 + self.total_moveable_height()
+    pub fn column_height(&self) -> usize {
+        self.immoveable_ground_level as usize + self.total_moveable_height()
     }
 
     //this function assumes that moveable liquid will always be on top of moveable ground
@@ -112,13 +104,13 @@ impl Cell {
         }
     }
 
-    pub fn get_amount(&self, material_id: MaterialId) -> u32 {
-        let mut total = 0u32;
+    pub fn get_amount(&self, material_id: MaterialId) -> usize {
+        let mut total = 0usize;
         if self.moveable_ground.material_id == material_id {
-            total += self.moveable_ground.height as u32;
+            total += self.moveable_ground.height as usize;
         }
         if self.moveable_liquid.material_id == material_id {
-            total += self.moveable_liquid.height as u32;
+            total += self.moveable_liquid.height as usize;
         }
         total
     }
@@ -129,6 +121,10 @@ impl Cell {
 
     pub fn was_generated_this_tick(&self) -> bool {
         self.generated_this_tick
+    }
+
+    pub fn add_layer(&self, Layer) -> Self{
+
     }
 
 }
